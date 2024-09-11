@@ -54,9 +54,13 @@ void push(){
 void pop(){
     if(top == -1){
         printf("Stack Underflow\n");
+        
     }
     else{
+        int val;
+        val = top;
         top = top - 1;
+        printf("Popped element is: %d", stack[val]);
     }
 }
 
