@@ -62,38 +62,38 @@ void main(){
 }
 
 void begin_insert(){
-    struct node *ptr;
+    struct node *new_node;
     int item;
-    ptr = (struct node*)malloc(sizeof(struct node));  // Correct allocation
-    if(ptr == NULL){
+    new_node = (struct node*)malloc(sizeof(struct node));  // Correct allocation
+    if(new_node == NULL){
         printf("\nStack Overflow\n");
         return;
     }
     else{
         printf("\nEnter value: ");
         scanf("%d", &item);
-        ptr->data = item;
-        ptr->next = head;
-        head = ptr;
+        new_node->data = item;
+        new_node->next = head;
+        head = new_node;
         printf("\nNode inserted\n");
     }
 }
 
 void last_insert(){
-    struct node *ptr, *temp;
+    struct node *new_node, *temp;
     int item;
-    ptr = (struct node*)malloc(sizeof(struct node));  
-    if(ptr == NULL){
+    new_node = (struct node*)malloc(sizeof(struct node));  
+    if(new_node == NULL){
         printf("\nStack Overflow\n");
         return;
     }
     else{
         printf("\nEnter value: ");
         scanf("%d", &item);
-        ptr->data = item;
-        ptr->next = NULL;
+        new_node->data = item;
+        new_node->next = NULL;
         if(head == NULL){
-            head = ptr;
+            head = new_node;
             printf("\nNode inserted\n");
         }
         else{
@@ -101,7 +101,7 @@ void last_insert(){
             while(temp->next != NULL){
                 temp = temp->next;
             }
-            temp->next = ptr;
+            temp->next = new_node;
             printf("\nNode inserted\n");
         }
     }
@@ -109,16 +109,16 @@ void last_insert(){
 
 void random_insert(){
     int i, loc, item;
-    struct node *ptr, *temp;
-    ptr = (struct node*)malloc(sizeof(struct node));  
-    if(ptr == NULL){
+    struct node *new_node, *temp;
+    new_node = (struct node*)malloc(sizeof(struct node));  
+    if(new_node == NULL){
         printf("\nStack Overflow\n");
         return;
     }
     else{
         printf("\nEnter element value: ");
         scanf("%d", &item);
-        ptr->data = item;
+        new_node->data = item;
         printf("\nEnter the location after which you want to insert: ");
         scanf("%d", &loc);
         temp = head;
@@ -126,106 +126,112 @@ void random_insert(){
             temp = temp->next;
             if(temp == NULL){
                 printf("\nCan't insert, location out of range\n");
-                free(ptr);
+                free(new_node);
                 return;
             }
         }
-        ptr->next = temp->next;
-        temp->next = ptr;
+        new_node->next = temp->next;
+        temp->next = new_node;
         printf("\nNode inserted\n");
     }
 }
 
 void begin_delete(){
-    struct node *ptr;
+    struct node *new_node;
     if(head == NULL){
         printf("\nList is empty\n");
     }
     else{
-        ptr = head;
+        new_node = head;
         head = head->next;
-        free(ptr);
+        free(new_node);
         printf("\nNode deleted from the beginning\n");
     }
 }
 
-void last_delete(){
-    struct node *ptr, *ptr1;
-    if(head == NULL){
+void last_delete() {
+    struct node *prev, *temp;
+    
+    if (head == NULL) {
         printf("\nList is empty\n");
-    }
-    else if(head->next == NULL){
+    } 
+    else if (head->next == NULL) {
+        // Case: Only one node in the list
         free(head);
         head = NULL;
         printf("\nOnly node of the list deleted\n");
-    }
-    else{
-        ptr = head;
-        while(ptr->next != NULL){
-            ptr1 = ptr;
-            ptr = ptr->next;
+    } 
+    else {
+        // Traverse to the last node
+        temp = head;
+        while (temp->next != NULL) {
+            prev = temp;
+            temp = temp->next;
         }
-        ptr1->next = NULL;
-        free(ptr);
+        // Now 'temp' points to the last node, and 'prev' points to the second-to-last node
+        prev->next = NULL;  // Disconnect the last node from the list
+        free(temp);  // Free the memory of the last node
         printf("\nNode deleted from the last\n");
     }
 }
 
-void random_delete(){
-    struct node *ptr, *ptr1;
+void random_delete() {
+    struct node *temp, *prev;
     int loc, i;
     printf("\nEnter the location of the node after which you want to perform deletion: ");
     scanf("%d", &loc);
-    ptr = head;
-    for(i = 0; i < loc; i++){
-        ptr1 = ptr;
-        ptr = ptr->next;
-        if(ptr == NULL){
+    temp = head;
+    for(i = 0; i < loc; i++) {
+        prev = temp;
+        temp = temp->next;
+        if(temp == NULL) {
             printf("\nCan't delete, location out of range\n");
             return;
         }
     }
-    ptr1->next = ptr->next;
-    free(ptr);
+    prev->next = temp->next;
+    free(temp);
     printf("\nDeleted node %d\n", loc + 1);
 }
 
-void search(){
-    struct node *ptr;
+void search() {
+    struct node *temp;
     int item, i = 0, flag = 0;
-    ptr = head;
-    if(ptr == NULL){
+    temp = head;
+    
+    if(temp == NULL) {
         printf("\nEmpty List\n");
-    }
-    else{
+    } else {
         printf("\nEnter item which you want to search: ");
         scanf("%d", &item);
-        while(ptr != NULL){
-            if(ptr->data == item){
-                printf("Item found at location %d\n", i + 1);
+        
+        while(temp != NULL) {
+            if(temp->data == item) {
+                printf("\nItem found at location %d\n", i + 1);
                 flag = 1;
                 break;
             }
             i++;
-            ptr = ptr->next;
+            temp = temp->next;
         }
-        if(flag == 0){
-            printf("Item not found\n");
+        
+        if(flag == 0) {
+            printf("\nItem not found\n");
         }
     }
 }
 
 void display(){
-    struct node *ptr;
-    ptr = head;
-    if(ptr == NULL){
+    struct node *temp;
+    temp = head;
+    if(temp == NULL){
         printf("\nNothing to print\n");
     }
     else{
         printf("\nPrinting values:\n");
-        while(ptr != NULL){
-            printf("%d ", ptr->data);
-            ptr = ptr->next;
+        while(temp != NULL){
+            printf("%d ", temp ->data);
+            temp = temp->next;
         }
         printf("\n");
     }
