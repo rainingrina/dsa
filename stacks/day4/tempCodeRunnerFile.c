@@ -34,9 +34,8 @@ char pop(struct Stack* stack){
         printf("Stack Underflow\n");
         return '\0';
     }
-    char popped = stack->arr[stack->top];
     stack->top -= 1;
-    return popped;
+    return stack->arr[stack->top];
 }
 
 char peek(struct Stack* stack){
